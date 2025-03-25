@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>문화예술 프로그램 통합</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    width: 1280px;
+    background-color: #E5E5E5; /* 밝은 회색 배경 */
+    color: #003087; /* 진한 파란색 텍스트 */
+    overflow-y: auto;
+}
+
+header {
+    height: 100px;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #FFFFFF; /* 흰색 헤더 */
+    color: #003087;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    border-bottom: 1px solid #D3D3D3; /* 얇은 회색 선 */
+}
+
+header h1 {
+    font-size: 32px;
+    font-weight: bold;
+}
+
+header .meta {
+    font-size: 16px;
+    text-align: right;
+}
+
+header .nav {
+    margin-top: 10px;
+}
+
+header .nav a {
+    color: #0066CC; /* 밝은 파란색 링크 */
+    text-decoration: none;
+    margin-left: 20px;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 5px 10px;
+    transition: all 0.3s ease;
+}
+
+header .nav a:hover {
+    text-decoration: underline; /* 호버 시 밑줄 */
+}
+
+header .nav a::after {
+    content: " ▶";
+    font-size: 12px;
+}
+
+main {
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.chart-container {
+    background-color: #FFFFFF;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    height: 400px;
+}
+
+.summary-table {
+    background-color: #FFFFFF;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.summary-table h2 {
+    font-size: 20px;
+    color: #003087;
+    margin-bottom: 15px;
+}
+
+.summary-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.summary-table th, .summary-table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #D3D3D3; /* 얇은 회색 선 */
+}
+
+.summary-table th {
+    background-color: #F5F5F5; /* 테이블 헤더는 밝은 회색 */
+    color: #003087;
+}
+
+.program-list {
+    background-color: #FFFFFF;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.program-list h2 {
+    font-size: 20px;
+    color: #003087;
+    margin-bottom: 15px;
+}
+
+.program-list ul {
+    list-style: none;
+    columns: 2;
+    column-gap: 30px;
+}
+
+.program-list li {
+    font-size: 16px;
+    line-height: 1.6;
+    padding: 5px 0;
+    border-bottom: 1px solid #D3D3D3; /* 얇은 회색 선 */
+}
+
+.program-list li:last-child {
+    border-bottom: none;
+}
+
+.accordion {
+    margin-bottom: 15px;
+}
+
+.accordion input[type="checkbox"] {
+    display: none;
+}
+
+.accordion label {
+    background-color: #F5F5F5;
+    color: #003087;
+    padding: 15px;
+    display: block;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+    border-bottom: 1px solid #D3D3D3;
+}
+
+.accordion label:hover {
+    background-color: #E5E5E5;
+}
+
+.accordion-content {
+    display: none;
+    background-color: #FFFFFF;
+    padding: 15px;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.accordion input[type="checkbox"]:checked ~ .accordion-content {
+    display: block;
+}
+
+.accordion-content ul {
+    list-style: none;
+}
+
+.accordion-content li {
+    font-size: 16px;
+    line-height: 1.6;
+    padding: 5px 0;
+    border-bottom: 1px solid #D3D3D3;
+}
+
+.accordion-content li:last-child {
+    border-bottom: none;
+}
+    </style>
+</head>
+<body>
+    <header>
+        <h1>MOU 기부프로그램 목록</h1>
+        <div class="meta">
+            <p>2025년 3월 24일</p>
+            <p>출처: 창의재단</p>
+            <div class="nav">
+                <a href="index.html">분석</a>
+                <a href="list.html">전체 목록</a>
+                <a href="mou_donation.html">MOU 기부프로그램</a>
+            </div>
+        </div>
+    </header>
+    <main>
+        <div class="chart-container">
+            <canvas id="themeChart"></canvas>
+        </div>
+        <div class="program-list">
+            <h2 id="programTitle">주제별 대표 프로그램 (체육 중심)</h2>
+            <ul id="programList">
+                <li>대한민국족구협회와 함께하는 족구교실 (대한족구협회, 전국, 20차시, 60,000원)</li>
+                <li>몸튼튼 마음튼튼 자신감튼튼 피구교실 (대한피구연맹, 서울, 경기, 부산, 광주, 경남, 전남, 전북, 제주, 30차시, 102,500원)</li>
+                <li>모두 함께 즐거운 하키 놀이 (대한하키협회, 서울, 경기, 인천, 대구, 30차시, 132,000원)</li>
+                <li>K리그 어린이 축구교실 (프로축구연맹, 서울, 경기, 인천, 10차시, 무료)</li>
+                <li>건강한 몸, 즐거운 마음 (체육･예술 거점대 (경상권 경남대), 경남(창원), 16차시, 무료)</li>
+                <li>이크에크 택견과 놀고 나니 우리 아이가 달라졌어요 (체육･예술 거점대 (강원충청권 서원대), 대전, 충북, 16차시, 무료)</li>
+            </ul>
+        </div>
+        <div class="accordion-section">
+            <h2>전체 프로그램 목록</h2>
+            <div class="accordion">
+                <input type="checkbox" id="section1">
+                <label for="section1">대한족구협회</label>
+                <div class="accordion-content">
+                    <ul>
+                        <li>대한민국족구협회와 함께하는 족구교실 (전국, 20차시, 60,000원)</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="accordion">
+                <input type="checkbox" id="section2">
+                <label for="section2">대한피구연맹</label>
+                <div class="accordion-content">
+                    <ul>
+                        <li>몸튼튼 마음튼튼 자신감튼튼 피구교실 (서울, 경기, 부산, 광주, 경남, 전남, 전북, 제주, 30차시, 102,500원)</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="accordion">
+                <input type="checkbox" id="section3">
+                <label for="section3">대한하키협회</label>
+                <div class="accordion-content">
+                    <ul>
+                        <li>모두 함께 즐거운 하키 놀이 (서울, 경기, 인천, 대구, 30차시, 132,000원)</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="accordion">
+                <input type="checkbox" id="section4">
+                <label for="section4">프로축구연맹</label>
+                <div class="accordion-content">
+                    <ul>
+                        <li>K리그 어린이 축구교실 (서울, 경기, 인천, 10차시, 무료)</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="accordion">
+                <input type="checkbox" id="section5">
+                <label for="section5">달크로즈유리드믹스연구소</label>
+                <div class="accordion-content">
+                    <ul>
+                        <li>신나는 유리드믹스 (서울, 경기, 40차시, 90,000원)</li>
+                        <li>즐거운 유리드믹스 (서울, 경기, 40차시, 90,000원)</li>
+                        <li>도레미 핸드벨 교실 (서울, 경기, 40차시, 90,000원)</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="accordion">
+                <input type="checkbox" id="section6">
+                <label for="section6">체육･예술 거점대 (경상권 경남대)</label>
+                <div class="accordion-content">
+                    <ul>
+                        <li>소리로 그리는 그림 : 난타 (경남, 16차시, 무료)</li>
+                        <li>건강한 몸, 즐거운 마음 (경남(창원), 16차시, 무료)</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="accordion">
+                <input type="checkbox" id="section7">
+                <label for="section7">체육･예술 거점대 (강원충청권 서원대)</label>
+                <div class="accordion-content">
+                    <ul>
+                        <li>이크에크 택견과 놀고 나니 우리 아이가 달라졌어요 (대전, 충북, 16차시, 무료)</li>
+                        <li>주몽의 후예 (청주, 16차시, 무료)</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="accordion">
+                <input type="checkbox" id="section8">
+                <label for="section8">체육･예술 거점대 (전라제주권 제주대)</label>
+                <div class="accordion-content">
+                    <ul>
+                        <li>천문학 속 획의 예술, 캘리그라피와 우주 (제주, 전라, 15차시, 무료)</li>
+                        <li>음악심리치유클래스 ‘싱 & 액트’ (제주, 15차시, 무료)</li>
+                        <li>스내그골프의 세계에 첫 걸음 내딛기 (제주, 15차시, 무료)</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="accordion">
+                <input type="checkbox" id="section9">
+                <label for="section9">교육기부 거점센터 (경상권 부경대)</label>
+                <div class="accordion-content">
+                    <ul>
+                        <li>아트 어드벤처 : 상상의 세계로 (부산, 40차시, 무료)</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="accordion">
+                <input type="checkbox" id="section10">
+                <label for="section10">교육기부 거점센터 (수도권 서정대)</label>
+                <div class="accordion-content">
+                    <ul>
+                        <li>신기한 세계 여행! 문화 속으로 풍덩 (경기, 서울, 40차시, 무료)</li>
+                        <li>타임머신 타고 떠나는 옛날 이야기 탐험 (경기, 서울, 40차시, 무료)</li>
+                        <li>건강 쑥쑥! 몸 튼튼 멀티스포츠 시간 (경기, 서울, 40차시, 무료)</li>
+                        <li>동물 친구들과 함께하는 올림픽 놀이 (경기, 서울, 40차시, 무료)</li>
+                        <li>짜릿한 스포츠 게임! 달려라 챌린지 (경기, 서울, 40차시, 무료)</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="accordion">
+                <input type="checkbox" id="section11">
+                <label for="section11">교육기부 거점센터 (강원충청권 상지대)</label>
+                <div class="accordion-content">
+                    <ul>
+                        <li>리코더 이야기 (강원(원주), 2차시, 무료)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        const programData = {
+            '미술': [
+                '천문학 속 획의 예술, 캘리그라피와 우주 (체육･예술 거점대 (전라제주권 제주대), 제주, 전라, 15차시, 무료)',
+                '소리로 그리는 그림 : 난타 (체육･예술 거점대 (경상권 경남대), 경남, 16차시, 무료)',
+                '아트 어드벤처 : 상상의 세계로 (교육기부 거점센터 (경상권 부경대), 부산, 40차시, 무료)',
+                '신기한 세계 여행! 문화 속으로 풍덩 (교육기부 거점센터 (수도권 서정대), 경기, 서울, 40차시, 무료)',
+                '타임머신 타고 떠나는 옛날 이야기 탐험 (교육기부 거점센터 (수도권 서정대), 경기, 서울, 40차시, 무료)'
+            ],
+            '음악': [
+                '신나는 유리드믹스 (달크로즈유리드믹스연구소, 서울, 경기, 40차시, 90,000원)',
+                '즐거운 유리드믹스 (달크로즈유리드믹스연구소, 서울, 경기, 40차시, 90,000원)',
+                '도레미 핸드벨 교실 (달크로즈유리드믹스연구소, 서울, 경기, 40차시, 90,000원)',
+                '음악심리치유클래스 ‘싱 & 액트’ (체육･예술 거점대 (전라제주권 제주대), 제주, 15차시, 무료)',
+                '리코더 이야기 (교육기부 거점센터 (강원충청권 상지대), 강원(원주), 2차시, 무료)'
+            ],
+            '체육': [
+                '대한민국족구협회와 함께하는 족구교실 (대한족구협회, 전국, 20차시, 60,000원)',
+                '몸튼튼 마음튼튼 자신감튼튼 피구교실 (대한피구연맹, 서울, 경기, 부산, 광주, 경남, 전남, 전북, 제주, 30차시, 102,500원)',
+                '모두 함께 즐거운 하키 놀이 (대한하키협회, 서울, 경기, 인천, 대구, 30차시, 132,000원)',
+                'K리그 어린이 축구교실 (프로축구연맹, 서울, 경기, 인천, 10차시, 무료)',
+                '건강한 몸, 즐거운 마음 (체육･예술 거점대 (경상권 경남대), 경남(창원), 16차시, 무료)',
+                '이크에크 택견과 놀고 나니 우리 아이가 달라졌어요 (체육･예술 거점대 (강원충청권 서원대), 대전, 충북, 16차시, 무료)',
+                '주몽의 후예 (체육･예술 거점대 (강원충청권 서원대), 청주, 16차시, 무료)',
+                '건강 쑥쑥! 몸 튼튼 멀티스포츠 시간 (교육기부 거점센터 (수도권 서정대), 경기, 서울, 40차시, 무료)',
+                '동물 친구들과 함께하는 올림픽 놀이 (교육기부 거점센터 (수도권 서정대), 경기, 서울, 40차시, 무료)',
+                '짜릿한 스포츠 게임! 달려라 챌린지 (교육기부 거점센터 (수도권 서정대), 경기, 서울, 40차시, 무료)',
+                '스내그골프의 세계에 첫 걸음 내딛기 (체육･예술 거점대 (전라제주권 제주대), 제주, 15차시, 무료)'
+            ]
+        };
+
+        const ctx = document.getElementById('themeChart').getContext('2d');
+        const themeChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['미술', '음악', '체육'],
+                datasets: [{
+                    data: [5, 5, 11], // 각 주제별 프로그램 개수 반영
+                    backgroundColor: ['#0F2C59', '#1A3A7A', '#2E548A'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: { font: { size: 14 } }
+                    },
+                    title: {
+                        display: true,
+                        text: '주제별 프로그램 분포',
+                        font: { size: 20 },
+                        color: '#0F2C59'
+                    }
+                },
+                onClick: (event, elements) => {
+                    if (elements.length > 0) {
+                        const index = elements[0].index;
+                        const theme = themeChart.data.labels[index];
+                        updateProgramList(theme);
+                    }
+                },
+                onHover: (event, elements) => {
+                    if (elements.length > 0) {
+                        event.native.target.style.cursor = 'pointer';
+                    } else {
+                        event.native.target.style.cursor = 'default';
+                    }
+                }
+            }
+        });
+
+        function updateProgramList(theme) {
+            const programList = document.getElementById('programList');
+            const programTitle = document.getElementById('programTitle');
+            programTitle.textContent = `주제별 대표 프로그램 (${theme} 중심)`;
+            programList.innerHTML = '';
+            const programs = programData[theme] || [];
+            programs.forEach(program => {
+                const li = document.createElement('li');
+                li.textContent = program;
+                programList.appendChild(li);
+            });
+        }
+
+        updateProgramList('체육');
+    </script>
+</body>
+</html>

@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>문화예술 프로그램 목록</title>
+    <style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    width: 1280px;
+    background-color: #E5E5E5; /* 밝은 회색 배경 */
+    color: #003087; /* 진한 파란색 텍스트 */
+    overflow-y: auto;
+}
+
+header {
+    height: 100px;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #FFFFFF; /* 흰색 헤더 */
+    color: #003087;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    border-bottom: 1px solid #D3D3D3; /* 얇은 회색 선 */
+}
+
+header h1 {
+    font-size: 32px;
+    font-weight: bold;
+}
+
+header .meta {
+    font-size: 16px;
+    text-align: right;
+}
+
+header .nav {
+    margin-top: 10px;
+}
+
+header .nav a {
+    color: #0066CC; /* 밝은 파란색 링크 */
+    text-decoration: none;
+    margin-left: 20px;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 5px 10px;
+    transition: all 0.3s ease;
+}
+
+header .nav a:hover {
+    text-decoration: underline; /* 호버 시 밑줄 */
+}
+
+header .nav a::after {
+    content: " ▶";
+    font-size: 12px;
+}
+
+main {
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.chart-container {
+    background-color: #FFFFFF;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    height: 400px;
+}
+
+.summary-table {
+    background-color: #FFFFFF;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.summary-table h2 {
+    font-size: 20px;
+    color: #003087;
+    margin-bottom: 15px;
+}
+
+.summary-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.summary-table th, .summary-table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #D3D3D3; /* 얇은 회색 선 */
+}
+
+.summary-table th {
+    background-color: #F5F5F5; /* 테이블 헤더는 밝은 회색 */
+    color: #003087;
+}
+
+.program-list {
+    background-color: #FFFFFF;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.program-list h2 {
+    font-size: 20px;
+    color: #003087;
+    margin-bottom: 15px;
+}
+
+.program-list ul {
+    list-style: none;
+    columns: 2;
+    column-gap: 30px;
+}
+
+.program-list li {
+    font-size: 16px;
+    line-height: 1.6;
+    padding: 5px 0;
+    border-bottom: 1px solid #D3D3D3; /* 얇은 회색 선 */
+}
+
+.program-list li:last-child {
+    border-bottom: none;
+}
+
+.accordion {
+    margin-bottom: 15px;
+}
+
+.accordion input[type="checkbox"] {
+    display: none;
+}
+
+.accordion label {
+    background-color: #F5F5F5;
+    color: #003087;
+    padding: 15px;
+    display: block;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+    border-bottom: 1px solid #D3D3D3;
+}
+
+.accordion label:hover {
+    background-color: #E5E5E5;
+}
+
+.accordion-content {
+    display: none;
+    background-color: #FFFFFF;
+    padding: 15px;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.accordion input[type="checkbox"]:checked ~ .accordion-content {
+    display: block;
+}
+
+.accordion-content ul {
+    list-style: none;
+}
+
+.accordion-content li {
+    font-size: 16px;
+    line-height: 1.6;
+    padding: 5px 0;
+    border-bottom: 1px solid #D3D3D3;
+}
+
+.accordion-content li:last-child {
+    border-bottom: none;
+}
+    </style>
+</head>
+<body>
+<header>
+        <h1>MOU 기부프로그램 목록</h1>
+        <div class="meta">
+            <p>2025년 3월 24일</p>
+            <p>출처: 창의재단</p>
+            <div class="nav">
+                <a href="index.html">분석</a>
+                <a href="list.html">전체 목록</a>
+                <a href="mou_donation.html">MOU 기부프로그램</a>
+            </div>
+        </div>
+    </header>
+    <main>
+        <div class="accordion">
+            <input type="checkbox" id="section1">
+            <label for="section1">강남대학교 산학협력단 (수도‧강원)</label>
+            <div class="accordion-content">
+                <ul>
+                    <li>무지개 브릿지의 다채로운 문화 탐험</li>
+                    <li>옛날놀이로 떠나는 시간여행</li>
+                    <li>신나게 노는 뉴 스포츠</li>
+                    <li>예술놀이터</li>
+                </ul>
+            </div>
+        </div>
+        <div class="accordion">
+            <input type="checkbox" id="section2">
+            <label for="section2">경인교육대학교 산학협력단 (수도‧강원)</label>
+            <div class="accordion-content">
+                <ul>
+                    <li>계절을 담은 미술 교실</li>
+                    <li>뚝딱뚝딱 종이접기 세상</li>
+                    <li>연극 놀이 아이들 극장</li>
+                    <li>공놀이로 쑥쑥 커요</li>
+                    <li>몸과 마음이 쑥쑥 자라는 신체 놀이</li>
+                </ul>
+            </div>
+        </div>
+        <div class="accordion">
+            <input type="checkbox" id="section3">
+            <label for="section3">서울교육대학교 산학협력단 (수도‧강원)</label>
+            <div class="accordion-content">
+                <ul>
+                    <li>나도 K-POP 스타! SM Universe 와 함께 하는 키즈 K-POP 댄스</li>
+                    <li>디지털 아트로 펼치는 상상나래</li>
+                    <li>생각이 춤추는 미술 놀이터</li>
+                    <li>세계 문화 탐험대: 알파벳과 함께 떠나는 세계여행</li>
+                    <li>세계 문화를 알아보는 다문화 그림책 영어 놀이</li>
+                    <li>아름다운 어울림으로 함께하는 음악 이야기</li>
+                    <li>오감으로 느끼는 그림책</li>
+                    <li>이세돌의 생각 키우기! 그레이트 킹덤 교실</li>
+                </ul>
+            </div>
+        </div>
+        <div class="accordion">
+            <input type="checkbox" id="section4">
+            <label for="section4">이화여자대학교 산학협력단 (수도‧강원)</label>
+            <div class="accordion-content">
+                <ul>
+                    <li>디자인 어드벤처</li>
+                    <li>알콩달콩 ART 특공대!</li>
+                </ul>
+            </div>
+        </div>
+        <div class="accordion">
+            <input type="checkbox" id="section5">
+            <label for="section5">(재)대구행복한 학교재단 (경상)</label>
+            <div class="accordion-content">
+                <ul>
+                    <li>색으로 말해요</li>
+                    <li>음악과 함께 Clap Clap</li>
+                    <li>FunFun한 신체놀이</li>
+                </ul>
+            </div>
+        </div>
+        <div class="accordion">
+            <input type="checkbox" id="section6">
+            <label for="section6">경남대학교 산학협력단 (경상)</label>
+            <div class="accordion-content">
+                <ul>
+                    <li>K팝 난타 – 마음을 두드려요</li>
+                    <li>꿈꾸는 캔버스 – 창의력 발전소</li>
+                    <li>나는야 칼림바 연주자</li>
+                    <li>나는야! 삐약이 성악가!</li>
+                    <li>오감톡톡! 즐거운 미술여행</li>
+                    <li>우리들의 그림책 만들기 – 지구촌 환경 이야기</li>
+                    <li>흙으로 빚은 작은 악기 오카리나</li>
+                    <li>나는야 K-pop 댄서</li>
+                    <li>달려라 인라인스케이트 질주본능!</li>
+                    <li>따르릉 따르릉! 두바퀴 자전거 여행</li>
+                    <li>바른 성장 키즈 서킷트레이닝</li>
+                    <li>신명나는 미니배구 친구들</li>
+                    <li>우드볼 마스터 클래스</li>
+                    <li>택견아! 놀자!</li>
+                </ul>
+            </div>
+        </div>
+        <div class="accordion">
+            <input type="checkbox" id="section7">
+            <label for="section7">국립창원대학교 산학협력단 (경상)</label>
+            <div class="accordion-content">
+                <ul>
+                    <li>꿈나무들과 함께하는 진주검무</li>
+                    <li>디지털콘텐츠 크리에이터</li>
+                    <li>무지개색 꿈 펼치기! 신나는 미술 놀이터</li>
+                    <li>튼튼! 쑥쑥! 놀이 세상!</li>
+                </ul>
+            </div>
+        </div>
+        <div class="accordion">
+            <input type="checkbox" id="section8">
+            <label for="section8">진주교육대학교 산학협력단 (경상)</label>
+            <div class="accordion-content">
+                <ul>
+                    <li>얼쑤~전래야 놀자!</li>
+                    <li>이야기가 살아 숨 쉬는 미술 놀이터</li>
+                    <li>놀이 체육과 함께 하는 상상Plus 미니게임!</li>
+                    <li>달려라! 스포츠 구기활동</li>
+                    <li>스텝 up! 신나는 K-pop 줄넘기</li>
+                    <li>창의력 UP! 몸으로 표현하는 세상</li>
+                </ul>
+            </div>
+        </div>
+        <div class="accordion">
+            <input type="checkbox" id="section9">
+            <label for="section9">제주대학교 산학협력단 (전라‧제주)</label>
+            <div class="accordion-content">
+                <ul>
+                    <li>소리의 마법, 미니하프</li>
+                    <li>손 끝 톡톡 칼림바</li>
+                    <li>예술융합학교 Art Jam</li>
+                    <li>Easy & Fun 스내그골프</li>
+                    <li>리듬라이즈 음악줄넘기</li>
+                </ul>
+            </div>
+        </div>
+        <div class="accordion">
+            <input type="checkbox" id="section10">
+            <label for="section10">호남대랄랄라 스쿨(주) (전라‧제주)</label>
+            <div class="accordion-content">
+                <ul>
+                    <li>세계문화탐험대</li>
+                    <li>음악 놀이터</li>
+                    <li>JOY 댄스 챌린지</li>
+                    <li>리드업 놀이터</li>
+                    <li>줄넘기 놀이터</li>
+                    <li>컵스택 놀이터</li>
+                </ul>
+            </div>
+        </div>
+        <div class="accordion">
+            <input type="checkbox" id="section11">
+            <label for="section11">호서대학교 산학협력단 (전라‧제주)</label>
+            <div class="accordion-content">
+                <ul>
+                    <li>북극곰과 함께하는 빙하 공놀이</li>
+                    <li>춤추고 노래하는 혹부리 영감 연극 여행</li>
+                    <li>친구와 함께 문화예술 놀이</li>
+                    <li>댄스 치어리더스</li>
+                    <li>신체놀이 따라 쑥쑥 콩나물 되기</li>
+                    <li>어울림 체육놀이</li>
+                    <li>튼튼창의체육</li>
+                </ul>
+            </div>
+        </div>
+        <div class="accordion">
+            <input type="checkbox" id="section12">
+            <label for="section12">공주교육대학교 산학협력단 (충청)</label>
+            <div class="accordion-content">
+                <ul>
+                    <li>둥기둥기~ 국악놀이터</li>
+                    <li>예술로 놀아요</li>
+                    <li>나는야, 하키선수</li>
+                    <li>신나는 실내체육</li>
+                </ul>
+            </div>
+        </div>
+        <div class="accordion">
+            <input type="checkbox" id="section13">
+            <label for="section13">서원대학교 산학협력단 (충청)</label>
+            <div class="accordion-content">
+                <ul>
+                    <li>KID 옴니버스</li>
+                    <li>바오밥 아래서 쿠아도!</li>
+                    <li>연극으로 배우는 역사이야기</li>
+                    <li>내가 우리나라 제일가는 명창인디!</li>
+                    <li>글로벌 친구들과 함께 불러요</li>
+                    <li>신나는 영어동화에 맞춰 DANCE</li>
+                    <li>예술로 그리는 상상의 세계(미술랭)</li>
+                    <li>즐거운 놀이연극</li>
+                    <li>쭉쭉 늘어나는 클레이와 창의력</li>
+                    <li>나는야 슛돌이</li>
+                    <li>신나는 발레리나</li>
+                    <li>신나는 치어리딩</li>
+                    <li>실내놀이와 신나는 음악줄넘기</li>
+                    <li>어디서나 운동장, 뉴스포츠 교실</li>
+                    <li>우리 K-POP 댄스하고 놀래?</li>
+                    <li>이크에크 택견! 전통무예의 힘</li>
+                    <li>전래놀이 창의 움직임</li>
+                </ul>
+            </div>
+        </div>
+        <div class="accordion">
+            <input type="checkbox" id="section14">
+            <label for="section14">한국교원대학교 산학협력단 (충청)</label>
+            <div class="accordion-content">
+                <ul>
+                    <li>무지갯빛 상상력 신나는 예술 탐험대</li>
+                    <li>상상랜드로 즐거운 탐험을 떠나요</li>
+                    <li>신나게 놀며 배우는 문화 한마당</li>
+                    <li>신나는 음악과 함께하는 스마트 줄넘기</li>
+                    <li>우리가 바로 국가대표 체육왕</li>
+                    <li>잠자고 있는 신체 근육을 깨워줘!</li>
+                </ul>
+            </div>
+        </div>
+        <div class="accordion">
+            <input type="checkbox" id="section15">
+            <label for="section15">(재)행복한 학교재단 (서울/경기)</label>
+            <div class="accordion-content">
+                <ul>
+                    <li>(’24학년도 겨울방학) 종이접기</li>
+                    <li>(’24학년도 겨울방학) 토탈공예</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

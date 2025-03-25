@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>문화예술 프로그램 분석</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    width: 1280px;
+    background-color: #E5E5E5; /* 밝은 회색 배경 */
+    color: #003087; /* 진한 파란색 텍스트 */
+    overflow-y: auto;
+}
+
+header {
+    height: 100px;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #FFFFFF; /* 흰색 헤더 */
+    color: #003087;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    border-bottom: 1px solid #D3D3D3; /* 얇은 회색 선 */
+}
+
+header h1 {
+    font-size: 32px;
+    font-weight: bold;
+}
+
+header .meta {
+    font-size: 16px;
+    text-align: right;
+}
+
+header .nav {
+    margin-top: 10px;
+}
+
+header .nav a {
+    color: #0066CC; /* 밝은 파란색 링크 */
+    text-decoration: none;
+    margin-left: 20px;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 5px 10px;
+    transition: all 0.3s ease;
+}
+
+header .nav a:hover {
+    text-decoration: underline; /* 호버 시 밑줄 */
+}
+
+header .nav a::after {
+    content: " ▶";
+    font-size: 12px;
+}
+
+main {
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.chart-container {
+    background-color: #FFFFFF;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    height: 400px;
+}
+
+.summary-table {
+    background-color: #FFFFFF;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.summary-table h2 {
+    font-size: 20px;
+    color: #003087;
+    margin-bottom: 15px;
+}
+
+.summary-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.summary-table th, .summary-table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #D3D3D3; /* 얇은 회색 선 */
+}
+
+.summary-table th {
+    background-color: #F5F5F5; /* 테이블 헤더는 밝은 회색 */
+    color: #003087;
+}
+
+.program-list {
+    background-color: #FFFFFF;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.program-list h2 {
+    font-size: 20px;
+    color: #003087;
+    margin-bottom: 15px;
+}
+
+.program-list ul {
+    list-style: none;
+    columns: 2;
+    column-gap: 30px;
+}
+
+.program-list li {
+    font-size: 16px;
+    line-height: 1.6;
+    padding: 5px 0;
+    border-bottom: 1px solid #D3D3D3; /* 얇은 회색 선 */
+}
+
+.program-list li:last-child {
+    border-bottom: none;
+}
+
+.accordion {
+    margin-bottom: 15px;
+}
+
+.accordion input[type="checkbox"] {
+    display: none;
+}
+
+.accordion label {
+    background-color: #F5F5F5;
+    color: #003087;
+    padding: 15px;
+    display: block;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+    border-bottom: 1px solid #D3D3D3;
+}
+
+.accordion label:hover {
+    background-color: #E5E5E5;
+}
+
+.accordion-content {
+    display: none;
+    background-color: #FFFFFF;
+    padding: 15px;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.accordion input[type="checkbox"]:checked ~ .accordion-content {
+    display: block;
+}
+
+.accordion-content ul {
+    list-style: none;
+}
+
+.accordion-content li {
+    font-size: 16px;
+    line-height: 1.6;
+    padding: 5px 0;
+    border-bottom: 1px solid #D3D3D3;
+}
+
+.accordion-content li:last-child {
+    border-bottom: none;
+}
+    </style>
+</head>
+<body>
+    <header>
+        <h1>문화예술 프로그램 분석</h1>
+        <div class="meta">
+            <p>2025년 3월 24일</p>
+            <p>출처: 창의재단</p>
+            <div class="nav">
+                <a href="analysis.html">분석</a>
+                <a href="list.html">전체 목록</a>
+                <a href="mou_donation.html">MOU 기부프로그램</a> <!-- 추가된 링크 -->
+            </div>
+        </div>
+    </header>
+    <main>
+        <div class="chart-container">
+            <canvas id="themeChart"></canvas>
+        </div>
+  
+        <div class="program-list">
+            <h2 id="programTitle">주제별 대표 프로그램 (미술 중심)</h2>
+            <ul id="programList">
+                <li>계절을 담은 미술 교실 (경인교육대학교)</li>
+                <li>디지털 아트로 펼치는 상상나래 (서울교육대학교)</li>
+                <li>생각이 춤추는 미술 놀이터 (서울교육대학교)</li>
+                <li>꿈꾸는 캔버스 – 창의력 발전소 (경남대학교)</li>
+                <li>오감톡톡! 즐거운 미술여행 (경남대학교)</li>
+                <li>무지개색 꿈 펼치기! 신나는 미술 놀이터 (국립창원대학교)</li>
+                <li>이야기가 살아 숨 쉬는 미술 놀이터 (진주교육대학교)</li>
+                <li>예술로 그리는 상상의 세계(미술랭) (서원대학교)</li>
+            </ul>
+        </div>
+    </main>
+    <script>
+        const programData = {
+            '미술': [
+                '계절을 담은 미술 교실 (경인교육대학교)',
+                '디지털 아트로 펼치는 상상나래 (서울교육대학교)',
+                '생각이 춤추는 미술 놀이터 (서울교육대학교)',
+                '꿈꾸는 캔버스 – 창의력 발전소 (경남대학교)',
+                '오감톡톡! 즐거운 미술여행 (경남대학교)',
+                '무지개색 꿈 펼치기! 신나는 미술 놀이터 (국립창원대학교)',
+                '이야기가 살아 숨 쉬는 미술 놀이터 (진주교육대학교)',
+                '예술로 그리는 상상의 세계(미술랭) (서원대학교)'
+            ],
+            '음악': [
+                '아름다운 어울림으로 함께하는 음악 이야기 (서울교육대학교)',
+                '나는야 칼림바 연주자 (경남대학교)',
+                '소리의 마법, 미니하프 (제주대학교)',
+                '음악과 함께 Clap Clap ((재)대구행복한 학교재단)',
+                '신나는 음악과 함께하는 스마트 줄넘기 (한국교원대학교)'
+            ],
+            '연극': [
+                '연극 놀이 아이들 극장 (경인교육대학교)',
+                '춤추고 노래하는 혹부리 영감 연극 여행 (호서대학교)',
+                '즐거운 놀이연극 (서원대학교)',
+                '연극으로 배우는 역사이야기 (서원대학교)'
+            ],
+            '댄스': [
+                '나도 K-POP 스타! SM Universe 와 함께 하는 키즈 K-POP 댄스 (서울교육대학교)',
+                '나는야 K-pop 댄서 (경남대학교)',
+                'JOY 댄스 챌린지 (호남대랄랄라 스쿨)',
+                '신나는 치어리딩 (서원대학교)',
+                '우리 K-POP 댄스하고 놀래? (서원대학교)'
+            ],
+            '스포츠': [
+                '신나게 노는 뉴 스포츠 (강남대학교)',
+                '공놀이로 쑥쑥 커요 (경인교육대학교)',
+                'Easy & Fun 스내그골프 (제주대학교)',
+                '달려라! 스포츠 구기활동 (진주교육대학교)',
+                '나는야, 하키선수 (공주교육대학교)'
+            ],
+            '기타': [
+                '무지개 브릿지의 다채로운 문화 탐험 (강남대학교)',
+                '세계문화탐험대 (호남대랄랄라 스쿨)',
+                '디자인 어드벤처 (이화여자대학교)',
+                '북극곰과 함께하는 빙하 공놀이 (호서대학교)',
+                '상상랜드로 즐거운 탐험을 떠나요 (한국교원대학교)'
+            ]
+        };
+
+        const ctx = document.getElementById('themeChart').getContext('2d');
+        const themeChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['미술', '음악', '연극', '댄스', '스포츠', '기타'],
+                datasets: [{
+                    data: [25, 20, 10, 15, 30, 20],
+                    backgroundColor: [
+                        '#0F2C59', '#1A3A7A', '#2E548A', '#436C9B', '#5784AC', '#E0E0E0'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: { font: { size: 14 } }
+                    },
+                    title: {
+                        display: true,
+                        text: '주제별 프로그램 분포',
+                        font: { size: 20 },
+                        color: '#0F2C59'
+                    }
+                },
+                onClick: (event, elements) => {
+                    if (elements.length > 0) {
+                        const index = elements[0].index;
+                        const theme = themeChart.data.labels[index];
+                        updateProgramList(theme);
+                    }
+                },
+                onHover: (event, elements) => {
+                    if (elements.length > 0) {
+                        event.native.target.style.cursor = 'pointer';
+                    } else {
+                        event.native.target.style.cursor = 'default';
+                    }
+                }
+            }
+        });
+
+        function updateProgramList(theme) {
+            const programList = document.getElementById('programList');
+            const programTitle = document.getElementById('programTitle');
+            programTitle.textContent = `주제별 대표 프로그램 (${theme} 중심)`;
+            programList.innerHTML = '';
+            const programs = programData[theme] || [];
+            programs.forEach(program => {
+                const li = document.createElement('li');
+                li.textContent = program;
+                programList.appendChild(li);
+            });
+        }
+
+        updateProgramList('미술');
+    </script>
+</body>
+</html>
